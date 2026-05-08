@@ -1,0 +1,32 @@
+{
+    "title": "sneddon-flat-frustum-fem: FEniCSx and analytical solutions for flat-punch and frustum nanoindentation",
+    "description": "Open-source FEniCSx (DOLFINx) finite-element scripts and Sneddon analytical solutions for axisymmetric indentation of an elastic half-space by a flat cylindrical punch and a flat-tipped cone (frustum) indenter. Reproduces the load-depth response, contact stress, free-surface displacement, von Mises field, and the FEM-vs-analytical validation figures used in the accompanying course-project chapter.",
+    "license": "MIT",
+    "upload_type": "software",
+    "creators": [
+        {
+            "name": "Rocheville, Ethan Jon",
+            "affiliation": "University of Hawaii at Manoa"
+        }
+    ],
+    "keywords": [
+        "finite element method",
+        "FEniCSx",
+        "DOLFINx",
+        "nanoindentation",
+        "contact mechanics",
+        "Sneddon",
+        "axisymmetric elasticity",
+        "flat punch",
+        "frustum indenter"
+    ],
+    "access_right": "open",
+    "language": "eng",
+    "related_identifiers": [
+        {
+            "identifier": "https://github.com/REPLACE_WITH_GITHUB_USER/sneddon-flat-frustum-fem",
+            "relation": "isSupplementTo",
+            "scheme": "url"
+        }
+    ]
+}

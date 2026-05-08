@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+title: "sneddon-flat-frustum-fem: FEniCSx and analytical solutions for flat-punch and frustum nanoindentation"
+message: "If you use this software, please cite it using the metadata in this file."
+type: software
+authors:
+  - given-names: "Ethan Jon"
+    family-names: "Rocheville"
+    email: "ethanjr@hawaii.edu"
+    # TODO: replace the line below with your ORCID before tagging a Zenodo release.
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+license: MIT
+keywords:
+  - finite-element method
+  - FEniCSx
+  - DOLFINx
+  - nanoindentation
+  - contact mechanics
+  - Sneddon
+  - axisymmetric elasticity
+  - flat punch
+  - frustum indenter
+repository-code: "https://github.com/REPLACE_WITH_GITHUB_USER/sneddon-flat-frustum-fem"
+abstract: >
+  Open-source FEniCSx (DOLFINx) finite-element scripts and Sneddon
+  analytical solutions for axisymmetric indentation of an elastic
+  half-space by a flat cylindrical punch and a flat-tipped cone
+  (frustum) indenter. Reproduces the load-depth response, contact
+  stress, free-surface displacement, von Mises field, and the
+  FEM-vs-analytical validation figures used in the accompanying
+  course-project chapter.
+version: "0.1.0"
+date-released: "2026-05-08"
+# TODO: after the first Zenodo release, fill these in:
+# doi: "10.5281/zenodo.XXXXXXX"
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.XXXXXXX"

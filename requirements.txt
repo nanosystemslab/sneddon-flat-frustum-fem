@@ -1,0 +1,8 @@
+# Pure-Python dependencies for the analytical / comparison scripts.
+# The FEM scripts (flat_punch.py, frustum.py) additionally require a
+# working FEniCSx environment: dolfinx, ufl, basix, petsc4py, mpi4py.
+# These are most reliably installed via conda-forge; see README.md.
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+gmsh>=4.11

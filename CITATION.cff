@@ -28,7 +28,7 @@ abstract: >
   stress, free-surface displacement, von Mises field, and the
   FEM-vs-analytical validation figures used in the accompanying
   course-project chapter.
-version: "0.2.2"
+version: "0.2.3"
 date-released: "2026-05-11"
 doi: "10.5281/zenodo.20129441"   # concept DOI — always resolves to the latest version
 identifiers:

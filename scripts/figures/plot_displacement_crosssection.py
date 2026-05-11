@@ -101,8 +101,8 @@ fig.savefig('displacement_crosssection.pdf', bbox_inches='tight')
 plt.close(fig)
 print('Saved: displacement_crosssection.png and .pdf')
 
-# ---- fig1 copy: 1.6x larger fonts and simplified ticks ----
-F = 1.6
+# ---- fig1 copy: simplified 3-tick layout, same fonts as the base figure ----
+F = 1.0
 fig, axes = plt.subplots(1, 2, figsize=(14, 6), sharey=True,
                          gridspec_kw={'wspace': 0})
 

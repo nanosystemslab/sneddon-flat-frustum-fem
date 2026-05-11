@@ -14,11 +14,11 @@ and the FEM-vs-Sneddon validation figures — and includes a 10× Young's
 modulus sensitivity-study variant.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20129441.svg)](https://doi.org/10.5281/zenodo.20129441)
 
-> The DOI badge above is a placeholder. After the first Zenodo release,
-> replace `XXXXXXX` in this README, `CITATION.cff`, and `.zenodo.json`
-> with the assigned record ID.
+The DOI badge above is the **concept DOI** — it always resolves to the
+latest archived release. The version DOI for the current release
+(v0.2.2) is [10.5281/zenodo.20129442](https://doi.org/10.5281/zenodo.20129442).
 
 ## Repository layout
 
@@ -208,17 +208,19 @@ MIT — see [LICENSE](LICENSE).
 ## Citing this code
 
 If you use these scripts in academic work, please cite the archived
-Zenodo release. A `CITATION.cff` file is included; once the repository
-is archived on Zenodo, replace the DOI placeholder in `CITATION.cff`,
-`.zenodo.json`, and the badge at the top of this README with the
-assigned DOI.
+Zenodo release. A `CITATION.cff` file is included and is automatically
+picked up by GitHub's "Cite this repository" widget.
+
+**Citation (concept — always-latest):**
 
 ```text
 Rocheville, E. J. (2026). sneddon-flat-frustum-fem: FEniCSx and
 analytical solutions for flat-punch and frustum nanoindentation
-(v0.2.0) [Computer software]. Zenodo.
-https://doi.org/<DOI assigned at release>
+[Computer software]. Zenodo. https://doi.org/10.5281/zenodo.20129441
 ```
+
+To pin a specific archived snapshot, substitute the version DOI
+(currently `10.5281/zenodo.20129442` for v0.2.2) for the concept DOI.
 
 ## Author
 

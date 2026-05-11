@@ -232,8 +232,8 @@ def frustum_stress_zz(rho, a, b, alpha, mu, eta):
     Under cone region  (b <= rho < a):  sigma = -(2*mu*eps)/(pi*a*(1-eta)) * [I_A' + I_B']
 
     I_A, I_A': numerical quadrature
-    I_B:  (1/beta) * [K(m) - F(phi, m)]  with m = (x/beta)^2, phi = arcsin(beta)
-    I_B': (1/x)    * [K(m) - F(phi, m)]  with m = (beta/x)^2, phi = arcsin(x)
+    I_B:        K(m) - F(phi, m)  with m = (x/beta)^2, phi = arcsin(beta)   [paper eq. for I_B(x), x < beta]
+    I_B': (beta/x) * [K(m) - F(phi, m)]  with m = (beta/x)^2, phi = arcsin(x) [paper eq. for I'_B(x), beta < x < 1]
 
     Note: stress is singular at rho = b (corner) and rho = a (contact edge).
     """
@@ -266,7 +266,7 @@ def frustum_stress_zz(rho, a, b, alpha, mu, eta):
             k = x / beta
             m = k**2
             if m < 0.999:
-                I_B = (1.0 / beta) * (ellipk(m) - ellipkinc(np.arcsin(beta), m))
+                I_B = ellipk(m) - ellipkinc(np.arcsin(beta), m)
             else:
                 # Near x -> beta, elliptic form diverges; use numerical fallback
                 def integrand_IB(t, _x=x, _b=beta):
@@ -288,7 +288,7 @@ def frustum_stress_zz(rho, a, b, alpha, mu, eta):
             # I_B' via elliptic integrals
             k = beta / x
             m = k**2
-            I_B_prime = (1.0 / x) * (ellipk(m) - ellipkinc(np.arcsin(x), m))
+            I_B_prime = (beta / x) * (ellipk(m) - ellipkinc(np.arcsin(x), m))
 
             sigma[i] = prefactor * (I_A_prime + I_B_prime)
 

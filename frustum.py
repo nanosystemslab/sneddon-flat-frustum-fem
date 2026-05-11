@@ -44,7 +44,9 @@ R_punch = 0.5          # mm flat tip radius (solve at convenient scale, rescale 
 H_punch = 1.0          # mm height
 
 # Frustum-specific parameters
-half_angle_deg = 59.7   # semi-included angle from indenter axis (degrees)
+# Paper convention: cone half-angle alpha = 60 deg from the surface, equivalently
+# 30 deg from the indenter axis, i.e. a 60 deg full cone (apex) angle.
+half_angle_deg = 30.0   # semi-included angle from indenter axis (degrees) -- 60 deg full cone
 half_angle_rad = np.radians(half_angle_deg)
 R_frustum_top = R_punch + H_punch * np.tan(half_angle_rad)
 

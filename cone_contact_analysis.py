@@ -51,7 +51,7 @@ alpha_surface = 90.0 - half_angle_from_axis          # 30.3 deg from surface
 tan_alpha = np.tan(np.radians(alpha_surface))         # ~0.584
 
 # Scale factor: simulation ran at convenient scale, rescale to actual punch size
-R_punch_actual = 0.021456  # mm (21.456 um)
+R_punch_actual = 0.010728  # mm (flat-tip RADIUS; 21.456 um is the face diameter)
 alpha_scale = R_punch_actual / b_sim
 b = R_punch_actual  # scaled flat tip radius
 
@@ -391,3 +391,68 @@ print(f"\nImplication: The flat-tip-only FEM model slightly underestimates")
 print(f"the true contact area. A proper contact formulation would be needed")
 print(f"to capture the cone-side contact accurately.")
 print("=" * 70)
+
+
+# ============================================================================
+# Paper Table 1: D_{x%} depth threshold where the FEC contact radius exceeds
+# the flat-tip radius by x percent.  From eq. (Dxpct) in the paper:
+#
+#     D_{x%}(alpha, b) = (1 + x/100) * b * tan(alpha) * arccos(1/(1 + x/100))
+#                     = k_x * b * tan(alpha)
+#
+# The corresponding average-pressure deviation depends only on a/b via
+# eq. (dsig-x):
+#
+#     sbar_FEC / sbar_FP = (b/a) * [ 1/2 + beta*sqrt(1-beta^2) / (2 * arccos(beta)) ]
+#
+# Both quantities are independent of mu, nu, and E -- they are pure-geometry
+# bounds on the FP-FEC equivalence.
+# ============================================================================
+
+def D_xpct(x_pct, b_radius, alpha_surface_rad):
+    """Depth at which a/b = 1 + x_pct/100.  Paper eq. (Dxpct)."""
+    f = 1.0 + x_pct / 100.0
+    return f * b_radius * np.tan(alpha_surface_rad) * np.arccos(1.0 / f)
+
+
+def sigma_bar_ratio(x_pct):
+    """sbar_FEC / sbar_FP at a/b = 1 + x_pct/100.  Paper eq. (dsig-x)."""
+    f = 1.0 + x_pct / 100.0
+    beta_loc = 1.0 / f
+    return beta_loc * (0.5 + beta_loc * np.sqrt(1.0 - beta_loc**2)
+                       / (2.0 * np.arccos(beta_loc)))
+
+
+x_thresholds = [0.1, 0.2, 0.3, 0.5]
+alpha_degs = [30, 45, 60, 70, 75, 80, 85, 89]
+b_micron_list = [5.0, 10.728, 15.0, 20.0, 25.0]
+
+print("\n" + "=" * 78)
+print("PAPER TABLE 1: D_{x%} CONTACT-RADIUS THRESHOLDS")
+print("(depths in nm; b values in um; alpha measured from the surface)")
+print("=" * 78)
+
+for x_pct in x_thresholds:
+    f = 1.0 + x_pct / 100.0
+    k_x = f * np.arccos(1.0 / f)
+    dsig = abs(1.0 - sigma_bar_ratio(x_pct)) * 100.0
+    print(f"\n(x = {x_pct}%:  a/b = {f:.3f},  k_x = {k_x:.5f},  "
+          f"|dsigma_bar| = {dsig:.2f}%)")
+    header = "  alpha   " + "".join(f"  b = {bv:>6.3f}" for bv in b_micron_list)
+    print(header)
+    for alpha_deg in alpha_degs:
+        alpha_rad = np.radians(alpha_deg)
+        row = [D_xpct(x_pct, bv * 1e-3, alpha_rad) * 1e6      # mm -> nm via *1e6
+               for bv in b_micron_list]
+        marker = "*" if alpha_deg == 60 else " "
+        print(f" {marker}{alpha_deg:>4}d   " + "".join(f"  {d:>10.0f}" for d in row))
+
+# Re-state the bolded row from the paper for sanity:
+print("\nPaper-row spot-check (alpha = 60 deg, b = 10.728 um):")
+for x_pct in x_thresholds:
+    d = D_xpct(x_pct, 10.728e-3, np.radians(60.0)) * 1e6
+    print(f"  D_{{{x_pct}%}} = {d:7.1f} nm "
+          f"(paper: 831, 1177, 1442, 1864 for x = 0.1, 0.2, 0.3, 0.5)"
+          if x_pct == 0.1 else f"  D_{{{x_pct}%}} = {d:7.1f} nm")
+
+print("=" * 78)

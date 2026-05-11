@@ -10,6 +10,12 @@ import numpy as np
 
 pv.OFF_SCREEN = True
 
+# ---- Actual-probe rescaling ----
+# Sim uses R_punch = 0.5 mm; the real probe has b = 10.728 um flat-tip radius.
+# Spatial coords scale by s = b / R_sim; stresses are invariant under uniform
+# rescaling in linear elasticity, so the stress field values stay in MPa.
+S = (0.010728 / 0.5) * 1000.0   # = 21.456;  sim mm  ->  actual um
+
 # ---- Use TeX fonts ----
 plt.rcParams.update({
     'text.usetex': True,
@@ -22,14 +28,19 @@ plt.rcParams.update({
 
 # ---- Load and slice both meshes ----
 def slice_and_extract(vtu_path):
-    """Read VTU, interpolate cell->point data, slice at y=0, return triangulation+stress."""
+    """Read VTU, interpolate cell->point data, slice at y=0, return triangulation+stress.
+
+    Spatial coords are returned in actual-probe micrometers (sim mm times S).
+    Stress values are returned unchanged in MPa (scale-invariant).
+    """
     mesh = pv.read(vtu_path)
     mesh = mesh.cell_data_to_point_data()
     sliced = mesh.slice(normal='y', origin=(0, 0, 0))
     sliced = sliced.triangulate()
     pts = sliced.points
     stress = sliced.point_data['von_Mises_Stress']
-    x, z = pts[:, 0], pts[:, 2]
+    x = pts[:, 0] * S
+    z = pts[:, 2] * S
 
     # Use actual mesh connectivity (not Delaunay) so empty space stays empty
     triangles = sliced.faces.reshape(-1, 4)[:, 1:]
@@ -57,22 +68,22 @@ for ax, triang, s, title in [
     tc = ax.tripcolor(triang, s, shading='gouraud', cmap='coolwarm',
                       vmin=vmin, vmax=vmax)
     ax.set_title(title, fontsize=18)
-    ax.set_xlabel(r'\textbf{x (mm)}', fontsize=16)
+    ax.set_xlabel(r'\textbf{x (\textmu{}m)}', fontsize=16)
     ax.set_aspect('equal')
     ax.set_facecolor('none')
-    ax.set_xlim(-3, 3)
+    ax.set_xlim(-3 * S, 3 * S)
     ax.margins(x=0)
     ax.tick_params(labelsize=14)
 
-# Fix doubled "3" on FEC x-axis: hide the rightmost tick
-axes[0].set_xticks([-3, -2, -1, 0, 1, 2])
+# Fix doubled tick on FEC x-axis: ticks at 0, +/- 20, +/- 40, +/- 60 um
+axes[0].set_xticks([-60, -40, -20, 0, 20, 40])
 
 # Hide inner spines so substrate looks continuous
 axes[0].spines['right'].set_visible(False)
 axes[1].spines['left'].set_visible(False)
 axes[0].tick_params(right=False)
 axes[1].tick_params(left=False, labelleft=False)
-axes[0].set_ylabel(r'\textbf{z (mm)}', fontsize=16)
+axes[0].set_ylabel(r'\textbf{z (\textmu{}m)}', fontsize=16)
 
 # Shared colorbar with scientific notation
 cbar = fig.colorbar(tc, ax=axes, orientation='vertical', fraction=0.02, pad=0.02)
@@ -104,22 +115,22 @@ for ax, triang, s, title in [
     tc = ax.tripcolor(triang, s, shading='gouraud', cmap='coolwarm',
                       vmin=vmin, vmax=vmax)
     ax.set_title(title, fontsize=18 * F)
-    ax.set_xlabel(r'\textbf{x (mm)}', fontsize=16 * F)
+    ax.set_xlabel(r'\textbf{x (\textmu{}m)}', fontsize=16 * F)
     ax.set_aspect('equal')
     ax.set_facecolor('none')
-    ax.set_xlim(-3, 3)
+    ax.set_xlim(-3 * S, 3 * S)
     ax.margins(x=0)
     ax.tick_params(labelsize=14 * F)
 
-# Simplified ticks: 0, 1.5, 3 (absolute) on x and 0, 2, 4 on y (shared)
-axes[0].set_xticks([-3, -1.5, 0, 1.5])  # skip 3 to avoid clash with FP's -3
-axes[1].set_xticks([-1.5, 0, 1.5, 3])   # skip -3 to avoid clash with FEC's 3
-axes[0].set_yticks([0, 2, 4])
+# Simplified ticks: every 30 um on x, every 40 um on y (shared)
+axes[0].set_xticks([-60, -30, 0, 30])   # skip +60 to avoid clash with FP's -60
+axes[1].set_xticks([-30, 0, 30, 60])    # skip -60 to avoid clash with FEC's +60
+axes[0].set_yticks([0, 40, 80])
 axes[0].spines['right'].set_visible(False)
 axes[1].spines['left'].set_visible(False)
 axes[0].tick_params(right=False)
 axes[1].tick_params(left=False, labelleft=False)
-axes[0].set_ylabel(r'\textbf{z (mm)}', fontsize=16 * F)
+axes[0].set_ylabel(r'\textbf{z (\textmu{}m)}', fontsize=16 * F)
 
 cbar = fig.colorbar(tc, ax=axes, orientation='vertical', fraction=0.02, pad=0.02)
 cbar.set_label(r'\textbf{Von Mises Stress (MPa)}', fontsize=16 * F)

@@ -17,11 +17,16 @@ __pycache__/
 results_flat_punch/
 results_frustum/
 results_comparison/
+results_flat_punch_10xE/
+results_frustum_10xE/
+results_comparison_10xE/
 *.xdmf
 *.h5
 *.bp
 *.msh
 *.geo_unrolled
+*.vtu
+*.pvtu
 
 # Local matplotlib cache / fonts
 .cache/

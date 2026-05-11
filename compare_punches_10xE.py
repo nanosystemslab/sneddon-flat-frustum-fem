@@ -32,9 +32,9 @@ plt.rcParams["legend.markerscale"] = 2.0  # 2x legend marker size
 # ============================================================================
 # Load results from both simulations
 # ============================================================================
-flat_dir = "results_flat_punch"
-frust_dir = "results_frustum"
-output_dir = "results_comparison"
+flat_dir = "results_flat_punch_10xE"
+frust_dir = "results_frustum_10xE"
+output_dir = "results_comparison_10xE"
 os.makedirs(output_dir, exist_ok=True)
 
 # Load JSON parameters
@@ -545,14 +545,10 @@ with plt.rc_context({
     "axes.titleweight": "bold",
     **_big_sizes,
 }):
-    # Subsample FEM scatter to 30 evenly-spaced points for the manuscript figure
-    fp_r_d30, fp_uz_d30, _ = _subsample_even_r(fp_r, fp_uz, fp_szz, n=30)
-    fr_r_d30, fr_uz_d30, _ = _subsample_even_r(fr_r, fr_uz, fr_szz, n=30)
-
     fig, ax = plt.subplots(figsize=(10, 7))
-    ax.plot(fp_r_d30, fp_uz_d30, '*',
+    ax.plot(fp_r_d, fp_uz_d, '*',
             markersize=10, alpha=0.6, color=c[0], label='FP FEM')
-    ax.plot(fr_r_d30, fr_uz_d30, 's',
+    ax.plot(fr_r_d, fr_uz_d, 's',
             markersize=6, alpha=0.6, color=c[1], label='FEC FEM')
 
     fp_sned_full = np.zeros_like(r_anal)
